@@ -1,50 +1,120 @@
 <template>
-  <div class="personal-info-page container mx-auto px-4 py-8 max-w-2xl">
-    <h1 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">개인정보</h1>
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-      <div v-if="!isEditing" class="space-y-4">
-        <div class="flex items-center justify-center mb-6">
-          <Icon icon="mdi:account-circle" class="h-24 w-24 text-blue-500 dark:text-blue-400" />
+  <div class="container">
+    <h1>개인정보</h1>
+    <div class="info-box">
+      <div v-if="!isEditing" class="view-mode">
+        <div class="avatar">
+          <Icon icon="mdi:account-circle" />
         </div>
-        <p class="text-lg"><strong class="font-semibold text-gray-700 dark:text-gray-300">이름:</strong> <span class="text-gray-600 dark:text-gray-400">{{ personalInfo.username }}</span></p>
-        <p class="text-lg"><strong class="font-semibold text-gray-700 dark:text-gray-300">이메일:</strong> <span class="text-gray-600 dark:text-gray-400">{{ personalInfo.email }}</span></p>
-        <button @click="startEditing" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out mt-4">
-          편집
-        </button>
+        <p><strong>이름:</strong> {{ personalInfo.username }}</p>
+        <p><strong>이메일:</strong> {{ personalInfo.email }}</p>
+        <button @click="startEditing" class="btn">편집</button>
       </div>
-      <form v-else @submit.prevent="saveChanges" class="space-y-4">
-        <div>
-          <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">이름:</label>
-          <input v-model="editedInfo.username" id="username" type="text" required 
-                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+
+      <form v-else @submit.prevent="saveChanges" class="edit-mode">
+        <div class="form-group">
+          <label for="username">이름:</label>
+          <input v-model="editedInfo.username" id="username" type="text" required>
         </div>
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">이메일:</label>
-          <input v-model="editedInfo.email" id="email" type="email" required 
-                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        <div class="form-group">
+          <label for="email">이메일:</label>
+          <input v-model="editedInfo.email" id="email" type="email" required>
         </div>
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">새 비밀번호:</label>
-          <input v-model="editedInfo.password" id="password" type="password" 
-                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        <div class="form-group">
+          <label for="password">새 비밀번호:</label>
+          <input v-model="editedInfo.password" id="password" type="password">
         </div>
-        <div>
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">비밀번호 확인:</label>
-          <input v-model="editedInfo.confirmPassword" id="confirmPassword" type="password" 
-                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        <div class="form-group">
+          <label for="confirmPassword">비밀번호 확인:</label>
+          <input v-model="editedInfo.confirmPassword" id="confirmPassword" type="password">
         </div>
-        <div class="flex space-x-4">
-          <button type="submit" class="flex-1 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300 ease-in-out">
-            저장
-          </button>
-          <button @click="cancelEditing" type="button" class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition duration-300 ease-in-out">
-            취소
-          </button>
+        <div class="btn-group">
+          <button type="submit" class="btn save">저장</button>
+          <button type="button" @click="cancelEditing" class="btn cancel">취소</button>
         </div>
       </form>
     </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.info-box {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.avatar {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 48px;
+  color: #4a90e2;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  background: #4a90e2;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.save {
+  background: #4caf50;
+}
+
+.cancel {
+  background: #666;
+}
+
+@media (prefers-color-scheme: dark) {
+  .info-box {
+    background: #333;
+    border-color: #444;
+    color: white;
+  }
+
+  input {
+    background: #444;
+    border-color: #555;
+    color: white;
+  }
+}
+</style>
 
 <script setup>
 import { ref, reactive } from 'vue'

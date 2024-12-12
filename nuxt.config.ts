@@ -25,7 +25,6 @@ export default defineNuxtConfig({
   ],
   postcss: {
     plugins: {
-      tailwindcss: {},
       autoprefixer: {},
     },
   },
@@ -61,7 +60,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image',
     '@nuxt/devtools',
-    '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     'pinia-plugin-persistedstate',
     '@nuxtjs/color-mode',

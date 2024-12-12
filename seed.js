@@ -67,7 +67,6 @@ async function insertSampleData(table) {
           ],
           adminOnly: true
         },
-        { name: 'AI 채팅', path: '/ai-chat', children: [] }
       ]
       break
     case 'Category':

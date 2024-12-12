@@ -1,18 +1,14 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold mb-4 dark:text-gray-200">섹션 선택</h2>
-      <div class="flex flex-wrap gap-4">
-        <label v-for="section in sections" :key="section.id" class="inline-flex items-center cursor-pointer">
-          <div class="relative">
-            <input type="checkbox" v-model="selectedSections" :value="section.id" class="sr-only">
-            <div class="w-6 h-6 bg-white dark:bg-gray-700 border-2 border-gray-400 dark:border-gray-500 rounded-md transition-all duration-200 ease-in-out">
-              <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 opacity-0 transition-opacity duration-200 ease-in-out absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-            </div>
+  <div class="container">
+    <div class="section">
+      <h2>섹션 선택</h2>
+      <div class="checkbox-group">
+        <label v-for="section in sections" :key="section.id">
+          <div class="checkbox">
+            <input type="checkbox" v-model="selectedSections" :value="section.id">
+            <span class="checkmark"></span>
           </div>
-          <span class="ml-2 text-gray-700 dark:text-gray-300">{{ section.label }}</span>
+          <span class="label-text">{{ section.label }}</span>
         </label>
       </div>
     </div>
@@ -22,9 +18,8 @@
         <Suspense>
           <component :is="getSectionComponent(section.id)" />
           <template #fallback>
-            <div class="flex justify-center items-center h-full py-8">
-              <Icon icon="mdi:loading" class="animate-spin w-8 h-8 text-blue-500" />
-              <p class="mt-2 text-gray-600 dark:text-gray-400">데이터를 불러오는 중...</p>
+            <div class="loading">
+              <p>데이터를 불러오는 중...</p>
             </div>
           </template>
         </Suspense>
@@ -43,6 +38,110 @@
   </div>
 </template>
 
+<style scoped>
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="checkbox"]:checked + .checkmark {
+  background-color: #4a90e2;
+  border-color: #4a90e2;
+}
+
+input[type="checkbox"]:checked + .checkmark:after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.loading-icon {
+  animation: spin 1s linear infinite;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-color-scheme: dark) {
+  .checkmark {
+    background-color: #333;
+    border-color: #555;
+  }
+
+  h2, .label-text {
+    color: #fff;
+  }
+
+  .loading p {
+    color: #ccc;
+  }
+}
+</style>
+
 <script setup>
 import { ref, computed, defineAsyncComponent, onMounted, watch } from 'vue'
 import GalleryModal from '@/components/gallery/GalleryModal.vue'
@@ -59,17 +158,15 @@ const sections = [
 
 const selectedSections = ref([])
 
-// 로컬 스토리지에서 선택된 섹션 불러오기
 onMounted(() => {
   const savedSections = localStorage.getItem('selectedSections')
   if (savedSections) {
     selectedSections.value = JSON.parse(savedSections)
   } else {
-    selectedSections.value = ['carousel'] // 기본값 설정
+    selectedSections.value = ['carousel']
   }
 })
 
-// 선택된 섹션이 변경될 때마다 로컬 스토리지에 저장
 watch(selectedSections, (newValue) => {
   localStorage.setItem('selectedSections', JSON.stringify(newValue))
 }, { deep: true })
@@ -94,8 +191,6 @@ function getSectionComponent(sectionId) {
 const apiEndpoint = '/api/gallery'
 const galleryStore = useGalleryStore()
 
-// selectedGalleryItem ref와 closeGalleryModal 함수는 더 이상 필요하지 않습니다.
-
 definePageMeta({
   title: 'Dion - 홈',
   meta: [
@@ -104,31 +199,3 @@ definePageMeta({
   ]
 })
 </script>
-
-<style scoped>
-.text-shadow {
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-.aspect-square {
-  aspect-ratio: 1 / 1;
-}
-
-/* 체크박스 커스텀 스타일 */
-input:checked + div {
-  @apply bg-indigo-600 dark:bg-indigo-500 border-indigo-600 dark:border-indigo-500;
-}
-
-input:checked + div svg {
-  @apply opacity-100;
-}
-
-input:focus + div {
-  @apply ring-2 ring-offset-2 ring-indigo-500 dark:ring-indigo-400 dark:ring-offset-gray-800;
-}
-
-/* 호버 효과 */
-label:hover div {
-  @apply border-indigo-500 dark:border-indigo-400;
-}
-</style>

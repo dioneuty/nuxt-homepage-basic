@@ -1,56 +1,150 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white text-center">
-      <Icon icon="mdi:email-outline" class="inline-block mr-2 text-blue-500" />
+  <div class="container">
+    <h1>
+      <Icon icon="mdi:email-outline" class="icon" />
       문의하기
     </h1>
-    <form @submit.prevent="submitForm" class="max-w-lg mx-auto bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-      <!--제목-->
-      <div class="mb-4">
-        <label for="title" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-          <Icon icon="mdi:form-textbox" class="inline-block mr-2" />
-          제목 <span class="text-red-500">*</span>
+    <form @submit.prevent="submitForm" class="contact-form">
+      <div class="form-group">
+        <label for="title">
+          <Icon icon="mdi:form-textbox" class="icon" />
+          제목 <span class="required">*</span>
         </label>
-        <input type="text" id="title" v-model="form.title" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" required>
+        <input type="text" id="title" v-model="form.title" required>
       </div>
-      <!--이름-->
-      <div class="mb-4">
-        <label for="author" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-          <Icon icon="mdi:account" class="inline-block mr-2" />
-          이름 <span class="text-red-500">*</span>
+
+      <div class="form-group">
+        <label for="author">
+          <Icon icon="mdi:account" class="icon" />
+          이름 <span class="required">*</span>
         </label>
-        <input type="text" id="author" v-model="form.author" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" required>
+        <input type="text" id="author" v-model="form.author" required>
       </div>
-      <!--이메일-->
-      <div class="mb-4">
-        <label for="email" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-          <Icon icon="mdi:email" class="inline-block mr-2" />
-          이메일 <span class="text-red-500">*</span>
+
+      <div class="form-group">
+        <label for="email">
+          <Icon icon="mdi:email" class="icon" />
+          이메일 <span class="required">*</span>
         </label>
-        <input type="email" id="email" v-model="form.email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" required>
+        <input type="email" id="email" v-model="form.email" required>
       </div>
-      <!--메시지-->
-      <div class="mb-4">
-        <label for="content" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-          <Icon icon="mdi:message-text" class="inline-block mr-2" />
-          메시지 <span class="text-red-500">*</span>
+
+      <div class="form-group">
+        <label for="content">
+          <Icon icon="mdi:message-text" class="icon" />
+          메시지 <span class="required">*</span>
         </label>
-        <textarea id="content" v-model="form.content" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" rows="4" required></textarea>
+        <textarea id="content" v-model="form.content" rows="4" required></textarea>
       </div>
-      <!--버튼-->
-      <div class="flex justify-between">
-        <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">
-          <Icon icon="mdi:send" class="inline-block mr-2" />
+
+      <div class="button-group">
+        <button type="submit" class="submit-btn">
+          <Icon icon="mdi:send" class="icon" />
           메시지 전송
         </button>
-        <button type="button" @click="goBack" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded hover:bg-gray-400 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">
-          <Icon icon="mdi:arrow-left" class="inline-block mr-2" />
+        <button type="button" @click="goBack" class="back-btn">
+          <Icon icon="mdi:arrow-left" class="icon" />
           이전
         </button>
       </div>
     </form>
   </div>
 </template>
+
+<style scoped>
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.contact-form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.required {
+  color: red;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.submit-btn {
+  background: #4a90e2;
+  color: white;
+}
+
+.back-btn {
+  background: #ddd;
+  color: #333;
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@media (prefers-color-scheme: dark) {
+  .contact-form {
+    background: #333;
+    border-color: #444;
+  }
+
+  input, textarea {
+    background: #444;
+    color: #fff;
+    border-color: #555;
+  }
+
+  label {
+    color: #fff;
+  }
+
+  .back-btn {
+    background: #555;
+    color: #fff;
+  }
+}
+</style>
 
 <script setup>
 import { Icon } from '@iconify/vue';
