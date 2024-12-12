@@ -1,0 +1,66 @@
+/* 기본 (라이트 모드) 스타일 */
+.ql-editor {
+  color: black !important;
+}
+.ql-editor::before {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 다크 모드 스타일 */
+.dark .ql-editor {
+  color: white !important;
+}
+.dark .ql-editor::before {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 툴바 스타일 조정 */
+.ql-toolbar {
+  background-color: #f3f4f6;
+  border-color: #d1d5db !important;
+}
+
+.dark .ql-toolbar {
+  background-color: #374151;
+  border-color: #4b5563 !important;
+}
+
+.ql-toolbar .ql-stroke {
+  stroke: #4b5563;
+}
+
+.dark .ql-toolbar .ql-stroke {
+  stroke: #d1d5db;
+}
+
+.ql-toolbar .ql-fill {
+  fill: #4b5563;
+}
+
+.dark .ql-toolbar .ql-fill {
+  fill: #d1d5db;
+}
+
+/* 에디터 컨테이너 스타일 */
+.ql-container {
+  border-color: #d1d5db !important;
+}
+
+.dark .ql-container {
+  border-color: #4b5563 !important;
+}
+
+/* ql-video 클래스 스타일 - 모바일, 데스크톱에 따라 자동 크기 조정 */
+.ql-video {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+@media (min-width: 768px) {
+  .ql-video {
+    width: 768px;
+    aspect-ratio: 16 / 9;
+  }
+}
