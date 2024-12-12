@@ -1,23 +1,42 @@
 <template>
-  <div class="min-h-screen flex flex-col dark:bg-gray-900">
+  <div class="layout-container">
     <Nav 
       :isMenuOpen="isMenuOpen" 
       @openMenu="openMenu" 
       @closeMenu="closeMenu" 
     />
-    <div class="flex-grow">
+    <div class="main-content">
       <slot />
     </div>
     <Footer />
-    <ScrollToTop />
+    <!-- <ScrollToTop /> -->
     <!-- 배경 오버레이 -->
     <div
       v-if="isMenuOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 z-40"
+      class="menu-overlay"
       @click.self="closeMenu"
     ></div>
   </div>
 </template>
+
+<style scoped>
+.layout-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex-grow: 1;
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+</style>
 
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -36,7 +55,4 @@ function closeMenu() {
   isMenuOpen.value = false
   document.body.classList.remove('menu-open')
 }
-
-
-
 </script>

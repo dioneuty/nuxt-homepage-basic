@@ -1,40 +1,6 @@
 <template>
   <div class="container">
-    <div class="section">
-      <h2>섹션 선택</h2>
-      <div class="checkbox-group">
-        <label v-for="section in sections" :key="section.id">
-          <div class="checkbox">
-            <input type="checkbox" v-model="selectedSections" :value="section.id">
-            <span class="checkmark"></span>
-          </div>
-          <span class="label-text">{{ section.label }}</span>
-        </label>
-      </div>
-    </div>
-
-    <template v-for="section in sections" :key="section.id">
-      <template v-if="selectedSections.includes(section.id)">
-        <Suspense>
-          <component :is="getSectionComponent(section.id)" />
-          <template #fallback>
-            <div class="loading">
-              <p>데이터를 불러오는 중...</p>
-            </div>
-          </template>
-        </Suspense>
-      </template>
-    </template>
-
-    <GalleryModal
-      v-if="galleryStore.selectedItem"
-      :item="galleryStore.selectedItem"
-      :apiEndpoint="apiEndpoint"
-      @close="galleryStore.clearSelectedItem"
-      @edit="openEditModal"
-      @delete="deleteItem"
-      @update="fetchItems"
-    />
+    메인 페이지
   </div>
 </template>
 
@@ -144,8 +110,6 @@ input[type="checkbox"]:checked + .checkmark:after {
 
 <script setup>
 import { ref, computed, defineAsyncComponent, onMounted, watch } from 'vue'
-import GalleryModal from '@/components/gallery/GalleryModal.vue'
-import { useGalleryStore } from '@/stores/galleryStore'
 import { Icon } from '@iconify/vue'
 
 const sections = [

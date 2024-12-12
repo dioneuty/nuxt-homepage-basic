@@ -20,8 +20,6 @@ export default defineNuxtConfig({
     },
   },
   plugins: [
-    '~/plugins/v-html-img.js',
-    '~/plugins/v-html-img-one.js'
   ],
   postcss: {
     plugins: {
@@ -60,36 +58,35 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image',
     '@nuxt/devtools',
-    '@nuxtjs/i18n',
     'pinia-plugin-persistedstate',
     '@nuxtjs/color-mode',
   ],
-  image: {
-    inject: true,
-    defaultLazy: true,
-    observerOptions: {
-      rootMargin: '50px',
-      threshold: 0.1
-    },
-    format: ['webp'],
-    screens: {
-      'sm': 640,
-      'md': 768,
-      'lg': 1024,
-      'xl': 1280,
-      '2xl': 1536,
-    },
-  },
-  colorMode: {
-    preference: 'system', // 기본 설정
-    fallback: 'light', // 시스템 설정을 사용할 수 없을 때의 폴백
-    hid: 'nuxt-color-mode-script',
-    globalName: '__NUXT_COLOR_MODE__',
-    componentName: 'ColorScheme',
-    classPrefix: '',
-    classSuffix: '',
-    storageKey: 'nuxt-color-mode'
-  },
+  // image: {
+  //   inject: true,
+  //   defaultLazy: true,
+  //   observerOptions: {
+  //     rootMargin: '50px',
+  //     threshold: 0.1
+  //   },
+  //   format: ['webp'],
+  //   screens: {
+  //     'sm': 640,
+  //     'md': 768,
+  //     'lg': 1024,
+  //     'xl': 1280,
+  //     '2xl': 1536,
+  //   },
+  // },
+  // colorMode: {
+  //   preference: 'system', // 기본 설정
+  //   fallback: 'light', // 시스템 설정을 사용할 수 없을 때의 폴백
+  //   hid: 'nuxt-color-mode-script',
+  //   globalName: '__NUXT_COLOR_MODE__',
+  //   componentName: 'ColorScheme',
+  //   classPrefix: '',
+  //   classSuffix: '',
+  //   storageKey: 'nuxt-color-mode'
+  // },
   routeRules: {
     // 정적으로 생성할 페이지들 - about, services, related-sites, contact, under-construction
     '/about': { prerender: true },
@@ -107,18 +104,18 @@ export default defineNuxtConfig({
     '/adminboard': { swr: true },
     '/board': { swr: true },
     '/blog/**': { swr: true }, // Stale-While-Revalidate 전략 사용
-    '/gallery/**': { swr: true },
-    '/admingallery/**': { swr: true },
-    '/wiki/**': { swr: true },
-    '/ai-chat/**': { swr: true },
-    '/search/**': { swr: true },
-    '/youtube-gallery/**': { swr: true },
+    // '/gallery/**': { swr: true },
+    // '/admingallery/**': { swr: true },
+    // '/wiki/**': { swr: true },
+    // '/ai-chat/**': { swr: true },
+    // '/search/**': { swr: true },
+    // '/youtube-gallery/**': { swr: true },
 
     // API 라우트
     '/api/**': { cors: true, headers: { 'access-control-allow-methods': 'GET, POST, PUT, DELETE' } },
 
     // 클라이언트 사이드 렌더링 - outliner
-    '/outliner/**': { ssr: false },
+    // '/outliner/**': { ssr: false },
 
     // 관리자 페이지 (클라이언트 사이드 렌더링)
     //'/admin/**': { ssr: false },

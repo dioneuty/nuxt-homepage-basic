@@ -1,39 +1,39 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold mb-8 dark:text-white flex items-center">
-      <Icon icon="mdi:post-outline" class="mr-3 text-blue-500" width="40" height="40" />
+  <div class="blog-container">
+    <h1 class="blog-title">
+      <Icon icon="mdi:post-outline" class="title-icon" />
       {{ title }}
     </h1>
     
-    <div v-if="pending" class="flex justify-center items-center h-64">
-      <Icon icon="eos-icons:loading" class="text-blue-500" width="48" height="48" />
+    <div v-if="pending" class="loading-container">
+      <Icon icon="eos-icons:loading" class="loading-icon" />
     </div>
     
-    <div v-else-if="error" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
-      <p class="font-bold">에러 발생</p>
+    <div v-else-if="error" class="error-message">
+      <p class="error-title">에러 발생</p>
       <p>{{ error }}</p>
     </div>
     
     <div v-else>
-      <div v-if="posts.length === 0" class="text-center text-gray-600 dark:text-gray-400 py-12">
-        <Icon icon="mdi:folder-open-outline" class="mx-auto mb-4" width="64" height="64" />
+      <div v-if="posts.length === 0" class="empty-message">
+        <Icon icon="mdi:folder-open-outline" class="empty-icon" />
         <p>{{ emptyMessage }}</p>
       </div>
       
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-else class="posts-grid">
         <div v-for="post in posts" :key="post.id" 
-             class="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+             class="post-card"
              @click="navigateToPost(post.id)">
-          <div class="p-6">
-            <h2 class="text-xl font-semibold mb-3 dark:text-white group">
-              <span class="hover:text-blue-500 transition-colors duration-200 flex items-center">
-                <Icon icon="mdi:file-document-outline" class="mr-2 group-hover:text-blue-500" />
+          <div class="post-content">
+            <h2 class="post-title">
+              <span class="post-title-text">
+                <Icon icon="mdi:file-document-outline" class="post-icon" />
                 {{ post.title }}
               </span>
             </h2>
-            <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm" v-html="post.content.substring(0, 100) + '...'"></p>
-            <div class="flex items-center text-xs text-gray-500 dark:text-gray-400">
-              <Icon icon="mdi:calendar" class="mr-1" />
+            <p class="post-excerpt" v-html="post.content.substring(0, 100) + '...'"></p>
+            <div class="post-date">
+              <Icon icon="mdi:calendar" class="date-icon" />
               <span>{{ formatDate(post.createdAt) }}</span>
             </div>
           </div>
@@ -41,14 +41,177 @@
       </div>
     </div>
     
-    <div class="mt-8 text-right">
-      <NuxtLink :to="writeLink" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-flex items-center transition-colors duration-200">
-        <Icon icon="mdi:pencil" class="mr-2" />
+    <div class="write-button-container">
+      <NuxtLink :to="writeLink" class="write-button">
+        <Icon icon="mdi:pencil" class="write-icon" />
         {{ writeButtonText }}
       </NuxtLink>
     </div>
   </div>
 </template>
+
+<style scoped>
+.blog-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.blog-title {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.title-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-right: 0.75rem;
+  color: #3b82f6;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16rem;
+}
+
+.loading-icon {
+  width: 3rem;
+  height: 3rem;
+  color: #3b82f6;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
+  color: #b91c1c;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-title {
+  font-weight: bold;
+}
+
+.empty-message {
+  text-align: center;
+  color: #6b7280;
+  padding: 3rem 0;
+}
+
+
+.empty-icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .posts-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.post-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+
+.post-card:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  background-color: #f3f4f6;
+}
+
+
+.post-content {
+  padding: 1.5rem;
+}
+
+.post-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.post-title-text {
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.post-title-text:hover {
+  color: #3b82f6;
+}
+
+.post-icon {
+  margin-right: 0.5rem;
+}
+
+.post-excerpt {
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+
+
+.post-date {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+
+.date-icon {
+  margin-right: 0.25rem;
+}
+
+.write-button-container {
+  margin-top: 2rem;
+  text-align: right;
+}
+
+.write-button {
+  display: inline-flex;
+  align-items: center;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: background-color 0.2s;
+}
+
+.write-button:hover {
+  background-color: #2563eb;
+}
+
+.write-icon {
+  margin-right: 0.5rem;
+}
+</style>
 
 <script setup>
 import { Icon } from '@iconify/vue'

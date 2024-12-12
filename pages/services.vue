@@ -1,19 +1,88 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 dark:text-white text-center">웹 개발 서비스</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div v-for="service in services" :key="service.id" class="bg-white shadow-md rounded-lg p-6 dark:bg-gray-800 dark:text-white flex flex-col items-center">
-        <div class="mb-4">
-          <Icon :icon="service.icon" class="w-16 h-16 text-blue-500" />
+  <div class="services-container">
+    <h1 class="services-title">웹 개발 서비스</h1>
+    <div class="services-grid">
+      <div v-for="service in services" :key="service.id" class="service-card">
+        <div class="service-icon">
+          <Icon :icon="service.icon" />
         </div>
-        <div class="text-center">
-          <h2 class="text-xl font-semibold mb-2">{{ service.title }}</h2>
-          <p class="text-gray-600 dark:text-gray-300">{{ service.description }}</p>
+        <div class="service-content">
+          <h2 class="service-title">{{ service.title }}</h2>
+          <p class="service-description">{{ service.description }}</p>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.services-title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.service-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.service-icon {
+  margin-bottom: 1rem;
+}
+
+.service-icon :deep(svg) {
+  width: 4rem;
+  height: 4rem;
+  color: #3b82f6;
+}
+
+.service-content {
+  text-align: center;
+}
+
+.service-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.service-description {
+  color: #4b5563;
+  font-size: 0.875rem;
+}
+
+</style>
 
 <script setup>
 import { Icon } from '@iconify/vue';
