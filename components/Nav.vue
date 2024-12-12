@@ -2,7 +2,7 @@
   <div>
     <nav :key="navKey" class="nav">
       <!-- 상단 유틸리티 메뉴 -->
-      <div class="utility-nav">
+      <div class="utility-nav" :class="{ 'hidden': isScrolled }">
         <div class="utility-container">
           <div class="right-utils">
             <p>오늘의 환율 <span style="color: red;">$1 = 1428.1원</span></p>
@@ -128,7 +128,7 @@ const menuItems = ref([
   { name: '질문과답변', path: '/qna' },
   // { name: '유머게시판', path: '/humor' }
   { name: '문의', path: '/contact' },
-  { name: '관련 사이트', path: '/related/sites' },
+  { name: '관련 사이트', path: '/related-sites' },
   // { 
   //   name: '관리자', 
   //   children: [
@@ -264,6 +264,23 @@ watch(() => navStore.isAlwaysOnTop, (newValue) => {
 })
 
 // ... (나머지 기존 코드 유지)
+
+const isScrolled = ref(false)
+
+// 스크롤 이벤트 핸들러
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 0
+}
+
+// 컴포넌트 마운트 시 스크롤 이벤트 리스너 추가
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+// 컴포넌트 언마운트 시 이벤트 리스너 제거
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 <style scoped>
 .nav {
@@ -277,8 +294,14 @@ watch(() => navStore.isAlwaysOnTop, (newValue) => {
 
 .utility-nav {
   background-color: white;
-  padding: 8px 0;
-  font-size: 13px;
+  height: 35px;
+  overflow: hidden;
+}
+
+.utility-nav.hidden {
+  height: 0;
+  padding: 0;
+  opacity: 0;
 }
 
 .utility-container {

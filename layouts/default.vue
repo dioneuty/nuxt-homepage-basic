@@ -9,7 +9,7 @@
       <slot />
     </div>
     <Footer />
-    <!-- <ScrollToTop /> -->
+    <ScrollToTop />
     <!-- 배경 오버레이 -->
     <div
       v-if="isMenuOpen"

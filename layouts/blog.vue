@@ -36,8 +36,8 @@
 }
 
 .blog-container {
-  /* container: 1200px; */
-  /* margin: 2rem auto 0; */
+  container: 1200px;
+  margin: 2rem auto 0;
   padding: 2rem 1rem;
   flex-grow: 1;
   display: flex;
@@ -59,17 +59,15 @@
   width: 100%;
   padding-right: 0;
   margin-bottom: 2rem;
-  display: none;
 }
-
+/*
 @media (min-width: 768px) {
   .blog-sidebar {
-    width: 25%;
     padding-right: 2rem;
     margin-bottom: 0;
     display: block;
   }
-}
+} */
 
 .blog-main {
   width: 100%;

@@ -1,116 +1,98 @@
 <template>
   <div class="blog-sidebar">
-    <h2 class="sidebar-title">
-      <Icon icon="icon-park-outline:category" class="category-icon" />
-      카테고리
-    </h2>
-    <ul class="category-list">
-      <li v-for="(category, index) in categories" :key="index">
-        <NuxtLink 
-          :to="category.id === '0' ? '/blog?category=0' : `/blog?category=${category.id}`" 
-          class="category-link"
-          :class="{ active: $route.query.category == category.id }"
-        >
-          <span>{{ category.name }}</span>
-          <span class="post-count">{{ category.post_count }}</span>
-        </NuxtLink>
-      </li>
-    </ul>
-    <NuxtLink to="/blog/edit-categories" class="edit-button">
-      <Icon icon="icon-park-outline:edit" class="edit-icon" />
-      카테고리 편집
-    </NuxtLink>
+    <!-- 나의 쇼핑정보 섹션 -->
+    <div class="sidebar-section">
+      <h2 class="section-title">나의 쇼핑정보</h2>
+      <ul class="menu-list">
+        <li>
+          <NuxtLink to="/mypage/orders" class="menu-item">주문 / 취소내역</NuxtLink>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 나의 정보 섹션 -->
+    <div class="sidebar-section">
+      <h2 class="section-title">나의 정보</h2>
+      <ul class="menu-list">
+        <li>
+          <NuxtLink to="/mypage/profile" class="menu-item">여권 정보</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/mypage/passport" class="menu-item">입국 정보</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/mypage/membership" class="menu-item">회원 정보 수정</NuxtLink>
+        </li>
+        
+        <li v-for="(category, index) in categories" :key="index">
+          <NuxtLink 
+            :to="category.id === '0' ? '/blog?category=0' : `/blog?category=${category.id}`" 
+            class="category-link"
+            :class="{ active: $route.query.category == category.id }"
+          >
+            <span>{{ category.name }}</span>
+            <span class="post-count">{{ category.post_count }}</span>
+          </NuxtLink>
+        </li>
+    
+      </ul>
+      
+    </div>
+
+    <!-- 고객센터 섹션 -->
+    <div class="sidebar-section">
+      <h2 class="section-title">고객센터</h2>
+      <ul class="menu-list">
+        <li>
+          <NuxtLink to="/notice" class="menu-item">공지사항</NuxtLink>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .blog-sidebar {
   background-color: white;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  position: sticky;
-  top: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.sidebar-section {
+  margin-bottom: 40px;
+}
 
-
-.sidebar-title {
-  font-size: 1.5rem;
+.section-title {
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e5e7eb;
-  display: flex;
-  align-items: center;
-  color: #1f2937;
+  color: #333;
+  margin-bottom: 20px;
 }
 
-.category-icon {
-  margin-right: 0.5rem;
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.category-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.menu-item {
+  display: block;
+  padding: 8px 0;
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
 }
 
-.category-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  color: #374151;
-  transition: all 0.2s ease-in-out;
+.menu-item:hover {
+  color: #000;
 }
 
-.category-link:hover {
-  background-color: #e5e7eb;
-}
-
-
-
-.category-link.active {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.post-count {
-  background-color: #e5e7eb;
-  color: #4b5563;
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-}
-
-
-.edit-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 0.5rem 1rem;
-  margin-top: 1.5rem;
-  background-color: #e5e7eb;
-  color: #4b5563;
-  border-radius: 0.375rem;
-  transition: background-color 0.2s;
-}
-
-.edit-button:hover {
-  background-color: #d1d5db;
-}
-
-.edit-icon {
-  margin-right: 0.5rem;
+.menu-item.active {
+  color: #000;
+  font-weight: bold;
 }
 </style>
 
 <script setup>
-import { Icon } from '@iconify/vue';
-
 defineProps({
   categories: {
     type: Array,
