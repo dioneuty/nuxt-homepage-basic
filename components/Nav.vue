@@ -1,55 +1,37 @@
 <template>
   <div>
-    <nav :key="navKey" :class="[
-      'transition-all duration-300 ease-in-out',
-      navStore.isAlwaysOnTop ? 'fixed top-0 left-0 right-0 z-50' : 'relative'
-    ]">
+    <nav :key="navKey" :class="['nav', navStore.isAlwaysOnTop ? 'nav-fixed' : '']">
       <!-- 데스크톱 네비게이션 -->
-      <div class="hidden lg:block">
+      <div class="desktop-nav">
         <!-- 로고 영역 -->
-        <div :class="[
-          'relative overflow-hidden bg-blue-600 dark:bg-gray-800',
-          navStore.isAlwaysOnTop ? 'h-16' : 'h-16'
-        ]">
-          <NuxtLink to="/" class="absolute inset-0 flex items-center justify-center">
-            <div class="text-white text-3xl font-bold flex items-center">
-              <WrenchScrewdriverIcon class="h-8 w-8 mr-2" />
-              <span class="text-shadow-sm">{{ appName }}</span>
+        <div class="logo-area">
+          <NuxtLink to="/" class="logo-link">
+            <div class="logo">
+              <!-- <WrenchScrewdriverIcon class="logo-icon" /> -->
+              <span class="logo-text">{{ appName }}</span>
             </div>
           </NuxtLink>
         </div>
         <!-- 네비게이션 바 -->
-        <div class="bg-blue-600 dark:bg-gray-800 text-white p-2 shadow-lg">
-          <div class="container mx-auto flex justify-between items-center">
-            <div class="space-x-4">
+        <div class="nav-bar">
+          <div class="nav-container">
+            <div class="menu-items">
               <template v-for="item in filteredMenuItems" :key="item.name">
                 <!-- 자식 메뉴가 있는 경우 -->
-                <div v-if="item.children" class="relative inline-block group">
+                <div v-if="item.children" class="dropdown">
                   <NuxtLink v-if="item.path" :to="item.path" 
-                            :class="['hover:text-blue-200 flex items-center py-2', 
-                                     { 'text-yellow-300 font-bold': isActiveOrHasActiveChild(item) }]">
+                    :class="['menu-link', { 'active': isActiveOrHasActiveChild(item) }]">
                     {{ item.name }}
-                    <svg class="w-4 h-4 ml-1 transition-transform duration-200 transform group-hover:rotate-180" 
-                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <!-- <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
+                    </svg> -->
                   </NuxtLink>
-                  <span v-else 
-                        :class="['cursor-default hover:text-blue-200 flex items-center py-2',
-                                 { 'text-yellow-300 font-bold': isActiveOrHasActiveChild(item) }]">
-                    {{ item.name }}
-                    <svg class="w-4 h-4 ml-1 transition-transform duration-200 transform group-hover:rotate-180" 
-                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                  </span>
-                  <!-- 자식 메뉴 노출 -->
-                  <div class="absolute left-0 mt-0 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg hidden group-hover:block">
-                    <div class="py-2">
+                  <!-- 드롭다운 메뉴 -->
+                  <div class="dropdown-menu">
+                    <div class="dropdown-content">
                       <NuxtLink v-for="child in item.children" :key="child.path"
-                                :to="child.path"
-                                :class="['block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-500 hover:text-white',
-                                         { 'bg-blue-500 text-white': isActive(child.path) }]">
+                        :to="child.path"
+                        :class="['dropdown-item', { 'active': isActive(child.path) }]">
                         {{ child.name }}
                       </NuxtLink>
                     </div>
@@ -57,38 +39,37 @@
                 </div>
                 <!-- 자식 메뉴가 없는 경우 -->
                 <NuxtLink v-else :to="item.path" 
-                          :class="['hover:text-blue-200 py-2', 
-                                   { 'text-yellow-300 font-bold': isActive(item.path) }]">
+                  :class="['menu-link', { 'active': isActive(item.path) }]">
                   {{ item.name }}
                 </NuxtLink>
               </template>
             </div>
-            <div class="flex items-center space-x-4">
-              <!-- 상단 고정 토글 버튼 -->
-              <button @click="toggleAlwaysOnTop" class="text-white hover:text-blue-200 p-2 rounded-full">
-                <Icon :icon="navStore.isAlwaysOnTop ? 'mdi:pin-off' : 'mdi:pin'" class="h-6 w-6" />
+            <!-- 우측 메뉴 -->
+            <div class="right-menu">
+              <button @click="toggleAlwaysOnTop" class="icon-button">
+                <Icon :icon="navStore.isAlwaysOnTop ? 'mdi:pin-off' : 'mdi:pin'" />
               </button>
-              <button @click="toggleColorMode" class="text-white hover:text-blue-200 p-2 rounded-full">
-                <SunIcon v-if="$colorMode.value === 'light'" class="h-6 w-6" />
-                <MoonIcon v-if="$colorMode.value === 'dark'" class="h-6 w-6" />
-                <ComputerDesktopIcon v-if="$colorMode.value === 'system'" class="h-6 w-6" />
+              <button @click="toggleColorMode" class="icon-button">
+                <SunIcon v-if="$colorMode.value === 'light'" />
+                <MoonIcon v-if="$colorMode.value === 'dark'" />
+                <ComputerDesktopIcon v-if="$colorMode.value === 'system'" />
               </button>
-
-              <div v-if="auth.isLoggedIn && auth.user" class="flex items-center space-x-2">
-                <NuxtLink to="/personal-info" class="flex items-center space-x-2 text-white hover:text-blue-200">
-                  <Icon icon="mdi:account-circle" class="h-6 w-6" />
+              <!-- 로그인/회원가입 버튼 -->
+              <div v-if="auth.isLoggedIn && auth.user" class="user-menu">
+                <NuxtLink to="/personal-info" class="user-info">
+                  <Icon icon="mdi:account-circle" />
                   <span>{{ auth.user.username }}</span>
                 </NuxtLink>
-                <button @click="logout" class="text-white hover:text-blue-200 p-2 rounded-full">
-                  <Icon icon="mdi:logout" class="h-6 w-6" />
+                <button @click="logout" class="icon-button">
+                  <Icon icon="mdi:logout" />
                 </button>
               </div>
-              <div v-else class="flex items-center space-x-2">
-                <button @click="openLoginModal" class="text-white hover:text-blue-200 p-2 rounded-full">
-                  <Icon icon="mdi:login" class="h-6 w-6" />
+              <div v-else class="auth-buttons">
+                <button @click="openLoginModal" class="icon-button">
+                  <Icon icon="mdi:login" />
                 </button>
-                <button @click="openRegisterModal" class="text-white hover:text-blue-200 p-2 rounded-full">
-                  <Icon icon="mdi:account-plus" class="h-6 w-6" />
+                <button @click="openRegisterModal" class="icon-button">
+                  <Icon icon="mdi:account-plus" />
                 </button>
               </div>
             </div>
@@ -97,36 +78,36 @@
       </div>
 
       <!-- 모바일 네비게이션 헤더 -->
-      <div class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-blue-600 dark:bg-gray-800 text-white px-4 py-2">
-        <div class="flex items-center justify-between" :class="{ 'pointer-events-auto': isMenuOpen }">
-          <button @click="openMenu" class="text-white" :class="{ 'pointer-events-none': isMenuOpen }">
-            <Bars3Icon class="h-6 w-6" />
+      <div class="mobile-nav-header">
+        <div class="mobile-nav-container">
+          <button @click="openMenu" class="menu-button" :class="{ 'disabled': isMenuOpen }">
+            <Bars3Icon class="menu-icon" />
           </button>
-          <NuxtLink to="/" class="text-xl font-bold text-white flex items-center" :class="{ 'pointer-events-none': isMenuOpen }">
-            <WrenchScrewdriverIcon class="h-8 w-8 mr-2" />
+          <NuxtLink to="/" class="mobile-logo" :class="{ 'disabled': isMenuOpen }">
+            <!-- <WrenchScrewdriverIcon class="mobile-logo-icon" /> -->
             <span>{{ appName }}</span>
           </NuxtLink>
-          <div class="flex items-center space-x-2">
-            <button @click="toggleColorMode" class="text-white p-2 rounded-full" :class="{ 'pointer-events-none': isMenuOpen }">
-              <SunIcon v-if="$colorMode.value === 'light'" class="h-6 w-6" />
-              <MoonIcon v-if="$colorMode.value === 'dark'" class="h-6 w-6" />
-              <ComputerDesktopIcon v-if="$colorMode.value === 'system'" class="h-6 w-6" />
+          <div class="mobile-actions">
+            <button @click="toggleColorMode" class="mobile-icon-button" :class="{ 'disabled': isMenuOpen }">
+              <SunIcon v-if="$colorMode.value === 'light'" class="mobile-action-icon" />
+              <MoonIcon v-if="$colorMode.value === 'dark'" class="mobile-action-icon" />
+              <ComputerDesktopIcon v-if="$colorMode.value === 'system'" class="mobile-action-icon" />
             </button>
-            <div v-if="auth.isLoggedIn && auth.user" class="flex items-center space-x-2">
-              <NuxtLink to="/personal-info" class="flex items-center space-x-2 text-white" :class="{ 'pointer-events-none': isMenuOpen }">
-                <Icon icon="mdi:account-circle" class="h-6 w-6" />
+            <div v-if="auth.isLoggedIn && auth.user" class="mobile-user-menu">
+              <NuxtLink to="/personal-info" class="mobile-user-info" :class="{ 'disabled': isMenuOpen }">
+                <Icon icon="mdi:account-circle" class="mobile-action-icon" />
                 <span>{{ auth.user.username }}</span>
               </NuxtLink>
-              <button @click="logout" class="text-white p-2 rounded-full" :class="{ 'pointer-events-none': isMenuOpen }">
-                <Icon icon="mdi:logout" class="h-6 w-6" />
+              <button @click="logout" class="mobile-icon-button" :class="{ 'disabled': isMenuOpen }">
+                <Icon icon="mdi:logout" class="mobile-action-icon" />
               </button>
             </div>
-            <div v-else class="flex items-center space-x-2">
-              <button @click="openLoginModal" class="text-white p-2 rounded-full" :class="{ 'pointer-events-none': isMenuOpen }">
-                <Icon icon="mdi:login" class="h-6 w-6" />
+            <div v-else class="mobile-auth-buttons">
+              <button @click="openLoginModal" class="mobile-icon-button" :class="{ 'disabled': isMenuOpen }">
+                <Icon icon="mdi:login" class="mobile-action-icon" />
               </button>
-              <button @click="openRegisterModal" class="text-white p-2 rounded-full" :class="{ 'pointer-events-none': isMenuOpen }">
-                <Icon icon="mdi:account-plus" class="h-6 w-6" />
+              <button @click="openRegisterModal" class="mobile-icon-button" :class="{ 'disabled': isMenuOpen }">
+                <Icon icon="mdi:account-plus" class="mobile-action-icon" />
               </button>
             </div>
           </div>
@@ -134,50 +115,35 @@
       </div>
 
       <!-- 모바일 슬라이딩 메뉴 -->
-      <div
-        :class="[
-          'fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-blue-700 to-blue-600 dark:from-gray-800 dark:to-gray-700 text-white transform transition-transform duration-300 ease-in-out shadow-lg pointer-events-auto',
-          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        ]"
-      >
-        <div class="flex flex-col h-full">
-          <div class="bg-blue-800 dark:bg-gray-700 p-4 flex justify-between items-center">
-            <NuxtLink to="/" class="text-2xl font-bold flex items-center" @click="closeMenu">
-              <WrenchScrewdriverIcon class="h-8 w-8 mr-2" />
+      <div :class="['mobile-sliding-menu', isMenuOpen ? 'open' : '']">
+        <div class="sliding-menu-content">
+          <div class="sliding-menu-header">
+            <NuxtLink to="/" class="sliding-menu-logo" @click="closeMenu">
               <span>{{ appName }}</span>
             </NuxtLink>
-            <button @click="closeMenu" class="text-white hover:text-blue-200">
-              <XMarkIcon class="h-6 w-6" />
+            <button @click="closeMenu" class="close-button">
+              <XMarkIcon class="close-icon" />
             </button>
           </div>
-          <div class="flex-grow p-2 space-y-2 overflow-y-auto">
-            <div v-for="item in filteredMenuItems" :key="item.name" class="relative">
+          <div class="sliding-menu-items">
+            <div v-for="item in filteredMenuItems" :key="item.name" class="menu-item">
               <div
                 @click="handleItemClick(item)"
-                :class="['flex justify-between items-center py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-200 ease-in-out cursor-pointer',
-                         { 'bg-blue-500 text-yellow-300 font-bold': isActiveOrHasActiveChild(item) }]"
+                :class="['menu-item-button', { 'active': isActiveOrHasActiveChild(item) }]"
               >
                 {{ item.name }}
                 <ChevronDownIcon
                   v-if="item.children"
-                  :class="['h-5 w-5 transition-transform', item.isOpen ? 'transform rotate-180' : '']"
+                  :class="['chevron-icon', item.isOpen ? 'rotate' : '']"
                 />
               </div>
-              <transition
-                enter-active-class="transition duration-300 ease-out"
-                enter-from-class="transform -translate-y-4 opacity-0"
-                enter-to-class="transform translate-y-0 opacity-100"
-                leave-active-class="transition duration-200 ease-in"
-                leave-from-class="transform translate-y-0 opacity-100"
-                leave-to-class="transform -translate-y-4 opacity-0"
-              >
-                <div v-if="item.children && item.isOpen" class="mt-2 ml-4 space-y-2 bg-blue-400 dark:bg-gray-600 rounded-lg pointer-events-auto">
+              <transition name="slide">
+                <div v-if="item.children && item.isOpen" class="submenu">
                   <NuxtLink
                     v-for="child in item.children"
                     :key="child.path"
                     :to="child.path"
-                    :class="['block py-2 px-4 rounded-lg hover:bg-blue-500 dark:hover:bg-gray-500 transition duration-200 ease-in-out',
-                             { 'bg-blue-500 dark:bg-gray-500 text-yellow-300 font-bold': isActive(child.path) }]"
+                    :class="['submenu-item', { 'active': isActive(child.path) }]"
                     @click="closeMenu"
                   >
                     {{ child.name }}
@@ -185,10 +151,10 @@
                 </div>
               </transition>
             </div>
-            <button @click="toggleColorMode" class="w-full text-left py-2 px-4 rounded-lg hover:bg-blue-500 dark:hover:bg-gray-600 transition duration-200 ease-in-out flex items-center">
-              <SunIcon v-if="$colorMode.value === 'light'" class="h-6 w-6 mr-2" />
-              <MoonIcon v-if="$colorMode.value === 'dark'" class="h-6 w-6 mr-2" />
-              <ComputerDesktopIcon v-if="$colorMode.value === 'system'" class="h-6 w-6 mr-2" />
+            <button @click="toggleColorMode" class="color-mode-button">
+              <SunIcon v-if="$colorMode.value === 'light'" class="mode-icon" />
+              <MoonIcon v-if="$colorMode.value === 'dark'" class="mode-icon" />
+              <ComputerDesktopIcon v-if="$colorMode.value === 'system'" class="mode-icon" />
               {{ $colorMode.value === 'light' ? '다크 모드' : $colorMode.value === 'dark' ? '시스템 설정' : '라이트 모드' }}
             </button>
           </div>
@@ -198,8 +164,8 @@
       <!-- 오버레이 -->
       <div
         v-if="isMenuOpen"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 pointer-events-auto"
-        @click.self="closeMenu"
+        class="mobile-menu-overlay"
+        @click="closeMenu"
       ></div>
     </nav>
   </div>
@@ -260,20 +226,22 @@ const menuItems = ref([
   { 
     name: '소개', 
     children: [
-      { name: '개인소개', path: '/about' },
-      { name: '서비스', path: '/services' }
+
     ],
     isOpen: false
   },
+  { name: '개인소개', path: '/about' },
+  { name: '서비스', path: '/services' },
   { 
     name: '게시판', 
     children: [
-      { name: '자유게시판', path: '/board' },
-      { name: '질문과답변', path: '/qna' },
-      { name: '유머게시판', path: '/humor' }
+      
     ],
     isOpen: false
   },
+  { name: '자유게시판', path: '/board' },
+  { name: '질문과답변', path: '/qna' },
+  // { name: '유머게시판', path: '/humor' }
   { name: '문의', path: '/contact' },
   { name: '갤러리', path: '/gallery' },
   { name: '위키', path: '/wiki' },
@@ -298,7 +266,6 @@ const menuItems = ref([
     isOpen: false,
     adminOnly: true
   },
-  { name: 'AI 채팅', path: '/ai-chat' },
   { name: '유튜브 갤러리', path: '/youtube-gallery' }
 ])
 
@@ -426,56 +393,483 @@ watch(() => navStore.isAlwaysOnTop, (newValue) => {
 // ... (나머지 기존 코드 유지)
 </script>
 <style scoped>
-.text-shadow-lg {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.group:hover .group-hover\:block {
-  display: block;
-}
-
-/* NProgress 스타일 커스터마이징 */
-#nprogress .bar {
-  background: #29d;
-  position: fixed;
-  z-index: 1031;
-  top: 0;
-  left: 0;
+.nav {
   width: 100%;
-  height: 2px;
-}
-
-/* 항상 위에 표시될 때의 스타일 */
-.fixed {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* 필요 시 추가 스타일 */
-nav {
-  transition: transform 0.3s ease-in-out;
-}
-
-nav.fixed {
-  transform: translateY(0);
-}
-
-nav.fixed.hidden {
-  transform: translateY(-100%);
-}
-
-.text-shadow-sm {
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-nav {
   transition: all 0.3s ease-in-out;
 }
 
-nav.fixed {
-  transform: translateY(0);
+.nav-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-nav.fixed.hidden {
-  transform: translateY(-100%);
+.desktop-nav {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .desktop-nav {
+    display: block;
+  }
+}
+
+.logo-area {
+  background-color: #2563eb;
+  height: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .logo-area {
+  background-color: #1f2937;
+}
+
+.logo-link {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  color: white;
+  font-size: 1.875rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.logo-icon {
+  height: 2rem;
+  width: 2rem;
+  margin-right: 0.5rem;
+}
+
+.logo-text {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.nav-bar {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark .nav-bar {
+  background-color: #1f2937;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-items {
+  display: flex;
+  gap: 1rem;
+}
+
+.menu-link {
+  color: white;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.menu-link:hover {
+  color: #bfdbfe;
+}
+
+.menu-link.active {
+  color: #fde047;
+  font-weight: bold;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-arrow {
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.25rem;
+  transition: transform 0.2s;
+}
+
+.dropdown:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 12rem;
+  background: white;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark .dropdown-menu {
+  background: #374151;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #374151;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.dark .dropdown-item {
+  color: #e5e7eb;
+}
+
+.dropdown-item:hover {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.dropdown-item.active {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.right-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-button {
+  color: white;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  transition: color 0.2s;
+}
+
+.icon-button:hover {
+  color: #bfdbfe;
+}
+
+.icon-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  transition: color 0.2s;
+}
+
+.user-info:hover {
+  color: #bfdbfe;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 모바일 네비게이션 스타일 */
+.mobile-nav-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background-color: #2563eb;
+  padding: 0.5rem 1rem;
+}
+
+.dark .mobile-nav-header {
+  background-color: #1f2937;
+}
+
+@media (max-width: 1023px) {
+  .mobile-nav-header {
+    display: block;
+  }
+}
+
+.mobile-nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-button {
+  color: white;
+  padding: 0.5rem;
+}
+
+.menu-button.disabled {
+  pointer-events: none;
+}
+
+.menu-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.mobile-logo {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.mobile-logo.disabled {
+  pointer-events: none;
+}
+
+.mobile-logo-icon {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+}
+
+.mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-icon-button {
+  color: white;
+  padding: 0.5rem;
+  border-radius: 9999px;
+}
+
+.mobile-icon-button.disabled {
+  pointer-events: none;
+}
+
+.mobile-action-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.mobile-user-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  text-decoration: none;
+}
+
+.mobile-user-info.disabled {
+  pointer-events: none;
+}
+
+.mobile-auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 모바일 슬라이딩 메뉴 */
+.mobile-sliding-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 18rem;
+  background: linear-gradient(to bottom, #2563eb, #1d4ed8);
+  color: white;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 50;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark .mobile-sliding-menu {
+  background: linear-gradient(to bottom, #1f2937, #111827);
+}
+
+.mobile-sliding-menu.open {
+  transform: translateX(0);
+}
+
+.sliding-menu-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sliding-menu-header {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sliding-menu-logo {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.close-button {
+  color: white;
+  padding: 0.5rem;
+}
+
+.close-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.sliding-menu-items {
+  flex-grow: 1;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.menu-item {
+  margin-bottom: 0.5rem;
+}
+
+.menu-item-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menu-item-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item-button.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fde047;
+  font-weight: bold;
+}
+
+.chevron-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.2s;
+}
+
+.chevron-icon.rotate {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+.submenu-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.submenu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.submenu-item.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fde047;
+  font-weight: bold;
+}
+
+.color-mode-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  color: white;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.color-mode-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mode-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+/* 슬라이드 트랜지션 애니메이션 */
+.slide-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.slide-enter-from {
+  transform: translateY(-1rem);
+  opacity: 0;
+}
+
+.slide-leave-to {
+  transform: translateY(-1rem);
+  opacity: 0;
 }
 </style>

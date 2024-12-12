@@ -1,29 +1,118 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8 text-center text-blue-600 dark:text-blue-400">
-      <Icon icon="mdi:link-variant" class="inline-block mr-2" />
+  <div class="container">
+    <h1>
+      <Icon icon="mdi:link-variant" class="icon" />
       관련 사이트
     </h1>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div v-for="site in relatedSites" :key="site.id" class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
-        <a :href="site.url" target="_blank" rel="noopener noreferrer" class="block">
-          <div class="p-6">
-            <div class="flex items-center mb-4">
-              <img v-if="site.customIcon" :src="site.customIcon" class="w-6 h-6 mr-3" alt="사이트 아이콘">
-              <Icon v-if="site.icon" :icon="site.icon" class="text-3xl mr-3 text-blue-500" />
-              <h2 class="text-xl font-semibold text-gray-800 dark:text-white">{{ site.name }}</h2>
+    <div class="sites-grid">
+      <div v-for="site in relatedSites" :key="site.id" class="site-card">
+        <a :href="site.url" target="_blank" rel="noopener noreferrer">
+          <div class="site-content">
+            <div class="site-header">
+              <img v-if="site.customIcon" :src="site.customIcon" class="site-icon" alt="사이트 아이콘">
+              <Icon v-if="site.icon" :icon="site.icon" class="icon" />
+              <h2>{{ site.name }}</h2>
             </div>
-            <p class="text-gray-600 dark:text-gray-300">{{ site.description }}</p>
+            <p>{{ site.description }}</p>
           </div>
-          <div class="bg-blue-500 text-white py-2 px-4 text-center">
-            방문하기
-          </div>
+          <div class="visit-btn">방문하기</div>
         </a>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.icon {
+  vertical-align: middle;
+}
+
+.sites-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .sites-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .sites-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.site-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.site-card:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s;
+}
+
+.site-content {
+  padding: 15px;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.site-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+.visit-btn {
+  background: #4a90e2;
+  color: white;
+  text-align: center;
+  padding: 8px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+  .site-card {
+    background: #333;
+    border-color: #444;
+    color: white;
+  }
+
+  .visit-btn {
+    background: #2d5a8e;
+  }
+}
+</style>
 
 <script setup>
 import { ref } from 'vue'
@@ -61,7 +150,7 @@ const relatedSites = ref([
     id: idx++,
     name: '플라워 써클 유튜브',
     url: 'https://www.youtube.com/@플라워써클',
-    description: '플라워 써클 유튜브입니다. 매우 즐거운 동물 관련 유머 동영상을 보여줍니다.',
+    description: '플라워 써클 유튜브입니다. 매우 즐거운 동물 관련 유머 동영���을 보여줍니다.',
     icon: 'mdi:youtube',
     customIcon: '/icons/channels4_profile.jpg'
   },
