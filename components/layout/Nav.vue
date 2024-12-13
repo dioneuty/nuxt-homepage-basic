@@ -8,11 +8,11 @@
             <p>오늘의 환율 <span style="color: red;">$1 = 1428.1원</span></p>
             <template v-if="auth.isLoggedIn && auth.user">
               <span class="util-item">👤 {{ auth.user.username }}</span>
-              <span class="util-item" @click="logout">로그아웃</span>
+              <span class="util-item">로그아웃</span>
             </template>
             <template v-else>
-              <span class="util-item" @click="openLoginModal">로그인</span>
-              <span class="util-item" @click="openRegisterModal">회원가입</span>
+              <span class="util-item">로그인</span>
+              <span class="util-item">회원가입</span>
               <span class="util-item">공지사항</span>
             </template>
           </div>
@@ -60,14 +60,10 @@
 <script setup>
 import { ref, inject, watch, onMounted, computed, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { WrenchScrewdriverIcon, ChevronDownIcon } from '@heroicons/vue/24/outline'
-import { Bars3Icon, XMarkIcon, SunIcon, MoonIcon, ComputerDesktopIcon } from '@heroicons/vue/24/solid'
-import { useLoginModal } from '~/composables/useLoginModal'
-import { useRegisterModal } from '~/composables/useRegisterModal'
-import { useAuth } from '~/composables/useAuth'
-import { useNavStore } from '~/stores/navStore'
+import { useAuth } from '~/composables/useAuth.js'
+import { useNavStore } from '~/stores/navStore.js'
 // import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+//import 'nprogress/nprogress.css'
 
 // const router = useRouter()
 // const navKey = ref(0)
@@ -107,38 +103,8 @@ const paintbrushEmoji = '🖌️'
 
 const menuItems = ref([
   { name: '홈', path: '/' },
-  { name: '블로그', path: '/blog' },
-  { 
-    name: '소개', 
-    children: [
-
-    ],
-    isOpen: false
-  },
-  { name: '개인소개', path: '/about' },
-  { name: '서비스', path: '/services' },
-  { 
-    name: '게시판', 
-    children: [
-      
-    ],
-    isOpen: false
-  },
-  { name: '자유게시판', path: '/board' },
-  { name: '질문과답변', path: '/qna' },
-  // { name: '유머게시판', path: '/humor' }
-  { name: '문의', path: '/contact' },
-  { name: '관련 사이트', path: '/related-sites' },
-  // { 
-  //   name: '관리자', 
-  //   children: [
-  //     { name: '관리자용 문의 게시판', path: '/contactboard' },
-  //     { name: '관리자용 게시판', path: '/adminboard' },
-  //     { name: '관리자용 갤러리', path: '/admingallery' },
-  //   ],
-  //   isOpen: false,
-  //   adminOnly: true
-  // },
+  { name: '샘플 - 소개', path: '/sample/about'},
+  { name: '샘플 - 연락', path: '/sample/contact'},
   ])
 
 
@@ -149,41 +115,6 @@ const filteredMenuItems = computed(() => {
     }
     return true
   })
-})
-
-function handleItemClick(item) {
-  if (item.children) {
-    item.isOpen = !item.isOpen
-  } else if (item.path) {
-    router.push(item.path)
-    closeMenu()
-  }
-}
-
-// const colorMode = useColorMode()
-// function toggleColorMode() {
-//   if (colorMode.value === 'light') colorMode.value = 'dark' // 라이트 모드
-//   else if (colorMode.value === 'dark') colorMode.value = 'system' // 다크 모드
-//   else colorMode.value = 'light' // 시스템 설정
-// }
-const isMenuOpen = ref(false)
-
-function openMenu() {
-  isMenuOpen.value = true
-  document.body.style.overflow = 'hidden'
-}
-
-function closeMenu() {
-  isMenuOpen.value = false
-  document.body.style.overflow = ''
-}
-
-watch(isMenuOpen, (newValue) => {
-  if (newValue) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-  }
 })
 
 const route = useRouter().currentRoute
@@ -208,8 +139,6 @@ defineProps({
 
 const emit = defineEmits(['openMenu', 'closeMenu', 'updateNavFixedState'])
 
-const { openModal: openLoginModal } = useLoginModal()
-const { openModal: openRegisterModal } = useRegisterModal()
 const { auth, setAuth } = useAuth()
 
 async function logout() {
@@ -249,19 +178,19 @@ function updateBodyPadding() {
   }
 }
 
-onMounted(() => {
-  updateBodyPadding()
-  //navKey.value++ //강제 리렌더링 유도
-  window.addEventListener('resize', updateBodyPadding)
-})
+// onMounted(() => {
+//   updateBodyPadding()
+//   //navKey.value++ //강제 리렌더링 유도
+//   window.addEventListener('resize', updateBodyPadding)
+// })
 
 // ... (기존 코드 유지)
 
 // isAlwaysOnTop watch 대신 navStore.isAlwaysOnTop watch
-watch(() => navStore.isAlwaysOnTop, (newValue) => {
-  emit('updateNavFixedState', newValue)
-  updateBodyPadding()
-})
+// watch(() => navStore.isAlwaysOnTop, (newValue) => {
+//   emit('updateNavFixedState', newValue)
+//   updateBodyPadding()
+// })
 
 // ... (나머지 기존 코드 유지)
 
@@ -289,6 +218,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   width: 100%;
+  z-index: 1000;
   border-bottom: 1px solid #e5e7eb;
 }
 

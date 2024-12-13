@@ -28,6 +28,7 @@
 
 .main-content {
   flex-grow: 1;
+  margin-top: 100px;
 }
 
 .menu-overlay {
@@ -40,8 +41,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import Nav from '~/components/Nav.vue'
-import Footer from '~/components/Footer.vue'
+import Nav from '~/components/layout/Nav.vue'
+import Footer from '~/components/layout/Footer.vue'
 import ScrollToTop from '~/components/common/ScrollToTop.vue'
 
 const isMenuOpen = ref(false)

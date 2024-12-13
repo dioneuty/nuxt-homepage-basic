@@ -6,21 +6,10 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "prisma generate",
-    "vercel-build": "npm run build",
-    "seed": "node seed.js"
+    "preview": "nuxt preview"
   },
   "dependencies": {
-    "@fullcalendar/core": "^6.1.15",
-    "@fullcalendar/daygrid": "^6.1.15",
-    "@fullcalendar/interaction": "^6.1.15",
-    "@fullcalendar/vue3": "^6.1.15",
-    "@heroicons/vue": "^2.1.5",
     "@pinia/nuxt": "^0.5.3",
-    "@prisma/client": "^5.19.0",
-    "@supabase/supabase-js": "^2.45.1",
-    "@vueup/vue-quill": "^1.2.0",
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "better-sqlite3": "^9.6.0",
@@ -32,25 +21,20 @@
     "marked": "^14.1.0",
     "multer": "^1.4.5-lts.1",
     "node-fetch": "^2.7.0",
-    "nprogress": "^0.2.0",
     "nuxt": "^3.12.4",
     "pinia": "^2.2.1",
-    "quill-markdown-shortcuts": "^0.0.10",
     "uuid": "^10.0.0",
-    "vue": "latest",
-    "vuedraggable": "^4.1.0"
+    "vue": "latest"
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.2",
     "@nuxt/devtools": "^1.4.2",
     "@nuxt/image": "^1.8.0",
-    "@nuxtjs/color-mode": "^3.5.1",
     "@nuxtjs/i18n": "^8.5.3",
     "@types/jsonwebtoken": "^9.0.6",
     "autoprefixer": "^10.4.20",
     "pinia-plugin-persistedstate": "^4.0.1",
-    "postcss": "^8.4.40",
-    "prisma": "^5.18.0"
+    "postcss": "^8.4.40"
   },
   "overrides": {
     "vue": "latest"

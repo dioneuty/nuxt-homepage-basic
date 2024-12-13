@@ -130,16 +130,6 @@ h3 {
   border-radius: 8px;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #1a1a1a;
-    color: #fff;
-  }
-
-  .card {
-    border-color: #333;
-  }
-}
 </style>
 
 <script setup>

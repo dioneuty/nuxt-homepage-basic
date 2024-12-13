@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  css: ['~/assets/css/main.css', '~/assets/css/quill-custom.css', '@/assets/css/calendar.css'],
+  css: ['~/assets/css/main.css'],
   app: {
     head: {
       title: 'Dion',
@@ -26,16 +26,16 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  runtimeConfig: {
-    public: {
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabaseKey: process.env.SUPABASE_KEY
-    }
-  },
+  // runtimeConfig: {
+  //   public: {
+  //     supabaseUrl: process.env.SUPABASE_URL,
+  //     supabaseKey: process.env.SUPABASE_KEY
+  //   }
+  // },
   compatibilityDate: '2024-08-04',
   vite: {
     optimizeDeps: {
-      include: ['vue3-quill']
+      include: []
     },
     build: {
       minify: 'terser',
@@ -47,7 +47,7 @@ export default defineNuxtConfig({
     }
   },
   build: {
-    transpile: ['vue3-quill', '@iconify/vue', 'bcryptjs', 'jose'],
+    transpile: ['bcryptjs', 'jose'],
   },
   nitro: {
     externals: {
@@ -59,7 +59,6 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/devtools',
     'pinia-plugin-persistedstate',
-    '@nuxtjs/color-mode',
   ],
   // image: {
   //   inject: true,
@@ -89,21 +88,20 @@ export default defineNuxtConfig({
   // },
   routeRules: {
     // 정적으로 생성할 페이지들 - about, services, related-sites, contact, under-construction
-    '/about': { prerender: true },
-    '/services': { prerender: true },
-    '/related-sites': { prerender: true },
-    '/contact': { prerender: true },
-    '/under-construction': { prerender: true },
-    
+    // '/about': { prerender: true },
+    // '/services': { prerender: true },
+    // '/related-sites': { prerender: true },
+    // '/contact': { prerender: true },
+
     // 동적 콘텐츠 (서버 사이드 렌더링) 에 대한 설정 - 메인 페이지
     
     // 동적 라우트에 대한 설정 - blog, gallery, admin-gallery, wiki, ai-chat, board, adminboard, contactboard, qna
     '/': { swr: true },
-    '/qna': { swr: true },
-    '/contactboard': { swr: true },
-    '/adminboard': { swr: true },
-    '/board': { swr: true },
-    '/blog/**': { swr: true }, // Stale-While-Revalidate 전략 사용
+    // '/qna': { swr: true },
+    // '/contactboard': { swr: true },
+    // '/adminboard': { swr: true },
+    // '/board': { swr: true },
+    // '/blog/**': { swr: true }, // Stale-While-Revalidate 전략 사용
     // '/gallery/**': { swr: true },
     // '/admingallery/**': { swr: true },
     // '/wiki/**': { swr: true },

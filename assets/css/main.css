@@ -3,6 +3,10 @@ body.menu-open {
   pointer-events: none;
 }
 
+body {
+  margin: 0;
+}
+
 body.menu-open nav,
 body.menu-open .pointer-events-auto {
   pointer-events: auto;

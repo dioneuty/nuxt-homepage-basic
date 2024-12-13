@@ -1,25 +1,88 @@
 <template>
-    <NuxtLayout>
-      <div class="container mx-auto px-4 py-8">
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-8 text-center">
-          <h1 class="text-4xl font-bold mb-4 text-gray-800 dark:text-white">
-            {{ error.statusCode === 404 ? '페이지를 찾을 수 없습니다' : '오류가 발생했습니다' }}
-          </h1>
-          <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
-            {{ error.message }}
-          </p>
-          <button @click="handleError" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-            이전 페이지로 돌아가기
-          </button>
-        </div>
+  <NuxtLayout>
+    <div class="error-container">
+      <div class="error-box">
+        <h1 class="error-title">
+          {{ error.statusCode === 404 ? '페이지를 찾을 수 없습니다' : '오류가 발생했습니다' }}
+        </h1>
+        <p class="error-message">
+          {{ error.message }}
+        </p>
+        <button @click="handleError" class="error-button">
+          이전 페이지로 돌아가기
+        </button>
       </div>
-    </NuxtLayout>
-  </template>
-  
-  <script setup>
-  const props = defineProps({
-    error: Object
-  })
-  
-  const handleError = () => clearError({ redirect: '/' })
-  </script>
+    </div>
+  </NuxtLayout>
+</template>
+
+<script setup>
+const props = defineProps({
+  error: Object
+})
+
+const handleError = () => clearError({ redirect: '/' })
+</script>
+
+<style scoped>
+.error-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.error-box {
+  background-color: white;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.error-title {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #1f2937;
+}
+
+.error-message {
+  font-size: 1.25rem;
+  margin-bottom: 32px;
+  color: #6b7280;
+}
+
+.error-button {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.error-button:hover {
+  background-color: #2563eb;
+}
+
+@media (max-width: 640px) {
+  .error-container {
+    padding: 16px;
+  }
+
+  .error-box {
+    padding: 24px;
+  }
+
+  .error-title {
+    font-size: 1.75rem;
+  }
+
+  .error-message {
+    font-size: 1rem;
+  }
+}
+</style>

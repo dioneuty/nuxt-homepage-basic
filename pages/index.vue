@@ -1,6 +1,21 @@
 <template>
   <div class="container">
     메인 페이지
+    ddfddddddddd
+    d
+    dd
+    dd
+    d
+    d
+    d
+    dd
+    d
+    d
+    d
+    d
+
+    d
+    d
   </div>
 </template>
 
@@ -109,51 +124,9 @@ input[type="checkbox"]:checked + .checkmark:after {
 </style>
 
 <script setup>
-import { ref, computed, defineAsyncComponent, onMounted, watch } from 'vue'
-import { Icon } from '@iconify/vue'
+import { ref, onMounted, watch } from 'vue'
 
-const sections = [
-  { id: 'carousel', label: '슬라이드 보기' },
-  { id: 'posts', label: '게시판 보기' },
-  { id: 'gallery', label: '갤러리 보기' },
-  { id: 'weather', label: '일기예보' },
-  { id: 'calendar', label: '달력' },
-]
 
-const selectedSections = ref([])
-
-onMounted(() => {
-  const savedSections = localStorage.getItem('selectedSections')
-  if (savedSections) {
-    selectedSections.value = JSON.parse(savedSections)
-  } else {
-    selectedSections.value = ['carousel']
-  }
-})
-
-watch(selectedSections, (newValue) => {
-  localStorage.setItem('selectedSections', JSON.stringify(newValue))
-}, { deep: true })
-
-function getSectionComponent(sectionId) {
-  switch (sectionId) {
-    case 'carousel':
-      return defineAsyncComponent(() => import('@/components/home/CarouselSection.vue'))
-    case 'posts':
-      return defineAsyncComponent(() => import('@/components/home/PostsSection.vue'))
-    case 'gallery':
-      return defineAsyncComponent(() => import('@/components/home/GallerySection.vue'))
-    case 'weather':
-      return defineAsyncComponent(() => import('@/components/home/WeatherSection.vue'))
-    case 'calendar':
-      return defineAsyncComponent(() => import('@/components/home/CalendarSection.vue'))
-    default:
-      return null
-  }
-}
-
-const apiEndpoint = '/api/gallery'
-const galleryStore = useGalleryStore()
 
 definePageMeta({
   title: 'Dion - 홈',
