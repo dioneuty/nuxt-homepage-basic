@@ -60,7 +60,7 @@
 <script setup>
 import { ref, inject, watch, onMounted, computed, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuth } from '~/composables/useAuth.js'
+import { useAuth } from '~/composables/common/useAuth.js'
 import { useNavStore } from '~/stores/navStore.js'
 // import NProgress from 'nprogress'
 //import 'nprogress/nprogress.css'
@@ -103,9 +103,29 @@ const paintbrushEmoji = '🖌️'
 
 const menuItems = ref([
   { name: '홈', path: '/' },
-  { name: '샘플 - 소개', path: '/sample/about'},
-  { name: '샘플 - 연락', path: '/sample/contact'},
-  ])
+  { name: '샘플 - 소개', path: '/sample/about' },
+  { name: '샘플 - 연락', path: '/sample/contact' },
+  { name: '회원가입', path: '/member/signup' },
+  { name: '본인 인증', path: '/member/verify' },
+  { name: '회원가입 정보입력', path: '/member/form' },
+  { name: '가입완료', path: '/member/complete' },
+  { name: '아이디/비밀번호 찾기', path: '/auth/find' },
+  { name: '이용약관', path: '/terms/service' },
+  { name: '개인정보처리방침', path: '/terms/privacy' },
+  { name: '공지사항 목록', path: '/cs/notice' },
+  { name: '공지사항 상세', path: '/cs/detail' },
+  { name: '주문내역', path: '/order/history' },
+  { name: '주문상세', path: '/order/detail' },
+  { name: '장바구니', path: '/order/cart' },
+  { name: '결제요청', path: '/payment/request' },
+  { name: '결제완료', path: '/payment/complete' },
+  { name: '마이페이지', path: '/profile/dashboard' },
+  { name: '마이페이지 여권정보', path: '/profile/passport' },
+  { name: '마이페이지 입국정보', path: '/profile/entry' },
+  { name: '마이페이지 출국정보', path: '/profile/exit' },
+  { name: '마이페이지 회원정보 수정 전 인증', path: '/profile/verify' },
+  { name: '마이페이지 회원정보', path: '/profile/info' }
+])
 
 
 const filteredMenuItems = computed(() => {

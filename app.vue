@@ -7,7 +7,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useAuth } from '~/composables/useAuth'
+import { useAuth } from '~/composables/common/useAuth'
 
 const { checkAuth } = useAuth()
 
